@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="Segoe UI,Roboto,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f0f4ff"/><stop offset="100%" stop-color="#e8eef8"/></linearGradient>
+    <linearGradient id="hdr" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1a3a6c"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+    <filter id="sh"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <style>
+      .box{rx:10;filter:url(#sh)}.svc{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.infra{fill:#fef3c7;stroke:#f59e0b;stroke-width:1.5}
+      .title{font-size:13px;font-weight:700;fill:#1e293b}.sub{font-size:10px;fill:#64748b}.port{font-size:9px;fill:#94a3b8}
+      .arrow{stroke:#94a3b8;stroke-width:1.5;fill:none;marker-end:url(#arrowhead)}
+      .zone-label{font-size:11px;font-weight:600;fill:#475569;text-transform:uppercase;letter-spacing:1px}
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+  </defs>
+  <rect width="900" height="620" fill="url(#bg)" rx="12"/>
+  <!-- Header -->
+  <rect x="0" y="0" width="900" height="52" fill="url(#hdr)" rx="12"/>
+  <rect x="0" y="30" width="900" height="22" fill="url(#hdr)"/>
+  <text x="450" y="33" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">PillarCloud - Platform Architecture</text>
+
+  <!-- Client -->
+  <rect x="370" y="68" width="160" height="42" class="box svc"/>
+  <text x="450" y="86" text-anchor="middle" class="title">Browser / Client</text>
+  <text x="450" y="100" text-anchor="middle" class="sub">HTTPS</text>
+  <line x1="450" y1="110" x2="450" y2="132" class="arrow"/>
+
+  <!-- Frontend -->
+  <rect x="345" y="132" width="210" height="48" class="box svc"/>
+  <text x="450" y="152" text-anchor="middle" class="title">Frontend (React + MUI)</text>
+  <text x="450" y="166" text-anchor="middle" class="sub">Nginx :80 | TypeScript + Vite</text>
+  <line x1="450" y1="180" x2="450" y2="204" class="arrow"/>
+
+  <!-- API Gateway -->
+  <rect x="320" y="204" width="260" height="48" class="box" style="fill:#dbeafe;stroke:#3b82f6;stroke-width:2"/>
+  <text x="450" y="224" text-anchor="middle" class="title">API Gateway (Express.js)</text>
+  <text x="450" y="238" text-anchor="middle" class="sub">:3000 | JWT Auth | Rate Limiting | Routing</text>
+
+  <!-- Zone: Services -->
+  <rect x="20" y="272" width="860" height="140" rx="8" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="35" y="288" class="zone-label">Application Services</text>
+
+  <!-- Auth -->
+  <rect x="35" y="298" width="155" height="50" class="box svc"/>
+  <text x="112" y="318" text-anchor="middle" class="title">Auth Service</text>
+  <text x="112" y="332" text-anchor="middle" class="sub">Node.js :3001</text>
+
+  <!-- Admin -->
+  <rect x="205" y="298" width="155" height="50" class="box svc"/>
+  <text x="282" y="318" text-anchor="middle" class="title">Admin Service</text>
+  <text x="282" y="332" text-anchor="middle" class="sub">FastAPI :8001</text>
+
+  <!-- Cloud -->
+  <rect x="375" y="298" width="155" height="50" class="box svc"/>
+  <text x="452" y="318" text-anchor="middle" class="title">Cloud Service</text>
+  <text x="452" y="332" text-anchor="middle" class="sub">FastAPI :8002</text>
+
+  <!-- Billing -->
+  <rect x="545" y="298" width="155" height="50" class="box svc"/>
+  <text x="622" y="318" text-anchor="middle" class="title">Billing Service</text>
+  <text x="622" y="332" text-anchor="middle" class="sub">Node.js :3002</text>
+
+  <!-- Notification -->
+  <rect x="715" y="298" width="155" height="50" class="box svc"/>
+  <text x="792" y="318" text-anchor="middle" class="title">Notification Svc</text>
+  <text x="792" y="332" text-anchor="middle" class="sub">Node.js :3003</text>
+
+  <!-- Arrows from gateway to services -->
+  <line x1="380" y1="252" x2="112" y2="298" class="arrow"/>
+  <line x1="420" y1="252" x2="282" y2="298" class="arrow"/>
+  <line x1="450" y1="252" x2="452" y2="298" class="arrow"/>
+  <line x1="480" y1="252" x2="622" y2="298" class="arrow"/>
+  <line x1="520" y1="252" x2="792" y2="298" class="arrow"/>
+
+  <!-- Zone: Infrastructure -->
+ <rect x="20" y="432" width="540" height="80" rx="8" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="6,3"/>
+ <text x="35" y="448" class="zone-label">Data &amp; Messaging Layer</text>
+
+  <rect x="35" y="458" width="155" height="44" class="box infra"/>
+  <text x="112" y="476" text-anchor="middle" class="title">PostgreSQL 15</text>
+  <text x="112" y="490" text-anchor="middle" class="sub">:5432 | Primary DB</text>
+
+  <rect x="205" y="458" width="155" height="44" class="box infra"/>
+  <text x="282" y="476" text-anchor="middle" class="title">Redis 7</text>
+  <text x="282" y="490" text-anchor="middle" class="sub">:6379 | Cache</text>
+
+  <rect x="375" y="458" width="170" height="44" class="box infra"/>
+  <text x="460" y="476" text-anchor="middle" class="title">RabbitMQ 3</text>
+  <text x="460" y="490" text-anchor="middle" class="sub">:5672 | Message Queue</text>
+
+  <!-- Arrows services to infra -->
+  <line x1="112" y1="348" x2="112" y2="458" class="arrow"/>
+  <line x1="282" y1="348" x2="282" y2="458" class="arrow"/>
+  <line x1="622" y1="348" x2="460" y2="458" class="arrow"/>
+  <line x1="792" y1="348" x2="460" y2="458" class="arrow"/>
+  <line x1="112" y1="370" x2="282" y2="458" class="arrow" stroke-dasharray="4,3"/>
+
+  <!-- OpenStack Zone -->
+  <rect x="590" y="432" width="280" height="80" rx="8" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="605" y="448" class="zone-label">OpenStack APIs</text>
+  <rect x="605" y="458" width="250" height="44" class="box" style="fill:#f5f3ff;stroke:#8b5cf6;stroke-width:1.5"/>
+  <text x="730" y="476" text-anchor="middle" class="title">Keystone | Nova | Neutron</text>
+  <text x="730" y="490" text-anchor="middle" class="sub">Cinder | Glance | Swift | Heat + 12 more</text>
+  <line x1="452" y1="348" x2="700" y2="458" class="arrow"/>
+
+  <!-- Legend -->
+  <rect x="20" y="535" width="860" height="70" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#sh)"/>
+  <text x="40" y="555" class="zone-label">Legend</text>
+  <rect x="40" y="565" width="14" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" rx="3"/>
+  <text x="60" y="576" class="sub">API Gateway</text>
+  <rect x="160" y="565" width="14" height="14" fill="#fff" stroke="#cbd5e1" stroke-width="1.5" rx="3"/>
+  <text x="180" y="576" class="sub">Microservice</text>
+  <rect x="290" y="565" width="14" height="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" rx="3"/>
+  <text x="310" y="576" class="sub">Infrastructure</text>
+  <rect x="420" y="565" width="14" height="14" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5" rx="3"/>
+  <text x="440" y="576" class="sub">External (OpenStack)</text>
+  <line x1="580" y1="572" x2="610" y2="572" class="arrow"/>
+  <text x="620" y="576" class="sub">Request Flow</text>
+  <line x1="720" y1="572" x2="750" y2="572" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="760" y="576" class="sub">Cache/Async</text>
+</svg>

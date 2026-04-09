@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Segoe UI,Roboto,sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#f1f5f9"/></linearGradient>
+    <linearGradient id="devhdr" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+    <linearGradient id="prodhdr" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#f87171"/></linearGradient>
+    <filter id="sh2"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.10"/></filter>
+    <style>
+      .bx{rx:8;filter:url(#sh2)}.t{font-size:12px;font-weight:700;fill:#1e293b}.s{font-size:9px;fill:#64748b}
+    </style>
+  </defs>
+  <rect width="900" height="480" fill="url(#bg2)" rx="12"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">Deployment Topology Comparison</text>
+
+  <!-- DEV SIDE -->
+  <rect x="20" y="50" width="420" height="410" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <rect x="20" y="50" width="420" height="36" rx="10" fill="url(#devhdr)"/>
+  <rect x="20" y="72" width="420" height="14" fill="url(#devhdr)"/>
+  <text x="230" y="74" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Development Environment</text>
+  <text x="230" y="108" text-anchor="middle" class="s">Docker Compose | Single Node | No HA</text>
+
+  <!-- Dev boxes -->
+  <rect x="40" y="124" width="380" height="36" class="bx" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="230" y="146" text-anchor="middle" class="t">docker compose up --build -d</text>
+
+  <rect x="55" y="174" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="110" y="194" text-anchor="middle" class="s">Frontend :80</text>
+  <rect x="175" y="174" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="230" y="194" text-anchor="middle" class="s">API Gateway :3000</text>
+  <rect x="295" y="174" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="350" y="194" text-anchor="middle" class="s">Auth Svc :3001</text>
+
+  <rect x="55" y="216" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="110" y="236" text-anchor="middle" class="s">Admin Svc :8001</text>
+  <rect x="175" y="216" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="230" y="236" text-anchor="middle" class="s">Cloud Svc :8002</text>
+  <rect x="295" y="216" width="110" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="350" y="236" text-anchor="middle" class="s">Billing Svc :3002</text>
+
+  <rect x="130" y="258" width="200" height="32" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="230" y="278" text-anchor="middle" class="s">Notification Service :3003</text>
+
+  <!-- Dev Infra -->
+  <rect x="40" y="306" width="380" height="56" rx="6" fill="#fffbeb" stroke="#fbbf24"/>
+  <text x="230" y="322" text-anchor="middle" font-size="10" font-weight="600" fill="#92400e">Infrastructure (Docker Volumes)</text>
+  <text x="100" y="348" text-anchor="middle" class="s">PostgreSQL :5432</text>
+  <text x="230" y="348" text-anchor="middle" class="s">Redis :6379</text>
+  <text x="360" y="348" text-anchor="middle" class="s">RabbitMQ :5672</text>
+
+  <rect x="40" y="376" width="380" height="36" rx="6" fill="#f5f3ff" stroke="#8b5cf6"/>
+  <text x="230" y="398" text-anchor="middle" class="s">bridge network: portal-net</text>
+
+  <text x="230" y="438" text-anchor="middle" font-size="11" font-weight="600" fill="#059669">localhost access | .env config | Hot-reload</text>
+
+  <!-- PROD SIDE -->
+  <rect x="460" y="50" width="420" height="410" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <rect x="460" y="50" width="420" height="36" rx="10" fill="url(#prodhdr)"/>
+  <rect x="460" y="72" width="420" height="14" fill="url(#prodhdr)"/>
+  <text x="670" y="74" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Production Environment</text>
+  <text x="670" y="108" text-anchor="middle" class="s">Kubernetes | Multi-Node HA | TLS + WAF</text>
+
+  <!-- Prod: Customer NS -->
+  <rect x="475" y="120" width="195" height="200" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-dasharray="4,2"/>
+  <text x="572" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">ns: pillarcloud</text>
+  <rect x="485" y="146" width="90" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="530" y="162" text-anchor="middle" class="s">Frontend x2</text>
+  <rect x="485" y="176" width="90" height="24" class="bx" fill="#dbeafe" stroke="#3b82f6"/><text x="530" y="192" text-anchor="middle" class="s">API GW x3</text>
+  <rect x="580" y="146" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="620" y="162" text-anchor="middle" class="s">Auth x3</text>
+  <rect x="580" y="176" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="620" y="192" text-anchor="middle" class="s">Cloud x3</text>
+  <rect x="485" y="206" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="525" y="222" text-anchor="middle" class="s">Billing x2</text>
+  <rect x="580" y="206" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="620" y="222" text-anchor="middle" class="s">Notif x2</text>
+  <rect x="485" y="240" width="175" height="28" rx="4" fill="#fffbeb" stroke="#fbbf24"/>
+  <text x="572" y="258" text-anchor="middle" class="s">PG HA (3) | Redis Sentinel | RMQ Cluster</text>
+  <rect x="485" y="276" width="175" height="24" rx="4" fill="#ecfdf5" stroke="#34d399"/>
+  <text x="572" y="292" text-anchor="middle" class="s">HPA: 2-10 replicas | Anti-affinity</text>
+
+  <!-- Prod: Admin NS -->
+  <rect x="685" y="120" width="185" height="200" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-dasharray="4,2"/>
+  <text x="777" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">ns: pillarcloud-admin</text>
+  <rect x="695" y="146" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="735" y="162" text-anchor="middle" class="s">Admin FE x2</text>
+  <rect x="780" y="146" width="80" height="24" class="bx" fill="#fecaca" stroke="#f87171"/><text x="820" y="162" text-anchor="middle" class="s">Admin GW x2</text>
+  <rect x="695" y="176" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="735" y="192" text-anchor="middle" class="s">Admin Svc x2</text>
+  <rect x="780" y="176" width="80" height="24" class="bx" fill="#fff" stroke="#cbd5e1"/><text x="820" y="192" text-anchor="middle" class="s">Auth Svc x2</text>
+
+  <rect x="695" y="212" width="165" height="24" rx="4" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="777" y="228" text-anchor="middle" class="s">VPN Only | MFA Required</text>
+  <rect x="695" y="244" width="165" height="24" rx="4" fill="#fee2e2" stroke="#f87171"/>
+  <text x="777" y="260" text-anchor="middle" class="s">NetworkPolicy: deny all public</text>
+  <rect x="695" y="276" width="165" height="24" rx="4" fill="#f3e8ff" stroke="#a78bfa"/>
+  <text x="777" y="292" text-anchor="middle" class="s">Separate secrets + JWT keys</text>
+
+  <!-- Prod: Infra -->
+  <rect x="475" y="336" width="395" height="44" rx="6" fill="#fffbeb" stroke="#fbbf24"/>
+  <text x="672" y="354" text-anchor="middle" font-size="10" font-weight="600" fill="#92400e">Shared Infrastructure (Encrypted Storage, HA)</text>
+  <text x="672" y="370" text-anchor="middle" class="s">CloudNativePG (3-node) | Redis Sentinel (3) | RabbitMQ Cluster (3) | S3 Backups</text>
+
+  <!-- Prod: Bottom -->
+  <rect x="475" y="394" width="190" height="28" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="570" y="412" text-anchor="middle" class="s">Ingress TLS :443 (public)</text>
+  <rect x="680" y="394" width="190" height="28" rx="4" fill="#fecaca" stroke="#f87171"/>
+  <text x="775" y="412" text-anchor="middle" class="s">Ingress VPN :443 (internal)</text>
+
+  <text x="670" y="448" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626">cert-manager | WAF | NetworkPolicies | Vault</text>
+</svg>

@@ -1,0 +1,228 @@
+version: '3.9'
+
+networks:
+  portal-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  rabbitmq-data:
+
+services:
+  # ─── Infrastructure ──────────────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: portal-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-openstack_portal}
+      POSTGRES_USER: ${POSTGRES_USER:-portal_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portal_pass}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/setup-db.sh:/docker-entrypoint-initdb.d/setup-db.sh
+    ports:
+      - "5433:5432"
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portal_user} -d ${POSTGRES_DB:-openstack_portal}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: portal-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: portal-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ─── Microservices ───────────────────────────────────────────────────────────
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: portal-auth
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${AUTH_SERVICE_PORT:-3001}
+      POSTGRES_HOST: postgres
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  admin-service:
+    build:
+      context: ./services/admin-service
+      dockerfile: Dockerfile
+    container_name: portal-admin
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${ADMIN_SERVICE_PORT:-8001}
+      POSTGRES_HOST: postgres
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  cloud-service:
+    build:
+      context: ./services/cloud-service
+      dockerfile: Dockerfile
+    container_name: portal-cloud
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${CLOUD_SERVICE_PORT:-8002}
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  billing-service:
+    build:
+      context: ./services/billing-service
+      dockerfile: Dockerfile
+    container_name: portal-billing
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${BILLING_SERVICE_PORT:-3002}
+      POSTGRES_HOST: postgres
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      CLOUD_SERVICE_URL: http://cloud-service:8002
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  notification-service:
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    container_name: portal-notification
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${NOTIFICATION_SERVICE_PORT:-3003}
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - portal-net
+
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: portal-gateway
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: ${API_GATEWAY_PORT:-3000}
+      AUTH_SERVICE_URL: http://auth-service:3001
+      ADMIN_SERVICE_URL: http://admin-service:8001
+      CLOUD_SERVICE_URL: http://cloud-service:8002
+      BILLING_SERVICE_URL: http://billing-service:3002
+      NOTIFICATION_SERVICE_URL: http://notification-service:3003
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      admin-service:
+        condition: service_healthy
+      cloud-service:
+        condition: service_healthy
+      billing-service:
+        condition: service_healthy
+    networks:
+      - portal-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:3000/api
+    container_name: portal-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - portal-net

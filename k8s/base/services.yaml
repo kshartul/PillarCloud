@@ -1,0 +1,267 @@
+# All application microservice Deployments + Services
+
+# ─── API Gateway ────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: openstack-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: api-gateway }
+  template:
+    metadata:
+      labels: { app: api-gateway }
+    spec:
+      containers:
+      - name: api-gateway
+        image: openstack-portal/api-gateway:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 3000 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 3000 }
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: openstack-portal
+spec:
+  selector: { app: api-gateway }
+  ports: [{ port: 3000, targetPort: 3000 }]
+---
+# ─── Auth Service ────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: openstack-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: auth-service }
+  template:
+    metadata:
+      labels: { app: auth-service }
+    spec:
+      containers:
+      - name: auth-service
+        image: openstack-portal/auth-service:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 3001 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 3001 }
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: openstack-portal
+spec:
+  selector: { app: auth-service }
+  ports: [{ port: 3001 }]
+---
+# ─── Admin Service ───────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service
+  namespace: openstack-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: admin-service }
+  template:
+    metadata:
+      labels: { app: admin-service }
+    spec:
+      containers:
+      - name: admin-service
+        image: openstack-portal/admin-service:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 8001 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 8001 }
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 150m, memory: 256Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-service
+  namespace: openstack-portal
+spec:
+  selector: { app: admin-service }
+  ports: [{ port: 8001 }]
+---
+# ─── Cloud Service ───────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-service
+  namespace: openstack-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: cloud-service }
+  template:
+    metadata:
+      labels: { app: cloud-service }
+    spec:
+      containers:
+      - name: cloud-service
+        image: openstack-portal/cloud-service:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 8002 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 8002 }
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 150m, memory: 256Mi }
+          limits:   { cpu: 1,    memory: 1Gi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-service
+  namespace: openstack-portal
+spec:
+  selector: { app: cloud-service }
+  ports: [{ port: 8002 }]
+---
+# ─── Billing Service ─────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-service
+  namespace: openstack-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: billing-service }
+  template:
+    metadata:
+      labels: { app: billing-service }
+    spec:
+      containers:
+      - name: billing-service
+        image: openstack-portal/billing-service:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 3002 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 3002 }
+          initialDelaySeconds: 20
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+  namespace: openstack-portal
+spec:
+  selector: { app: billing-service }
+  ports: [{ port: 3002 }]
+---
+# ─── Notification Service ────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: openstack-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: notification-service }
+  template:
+    metadata:
+      labels: { app: notification-service }
+    spec:
+      containers:
+      - name: notification-service
+        image: openstack-portal/notification-service:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 3003 }]
+        envFrom:
+        - configMapRef: { name: portal-config }
+        - secretRef:    { name: portal-secrets }
+        livenessProbe:
+          httpGet: { path: /health, port: 3003 }
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        resources:
+          requests: { cpu: 50m,  memory: 64Mi }
+          limits:   { cpu: 200m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: openstack-portal
+spec:
+  selector: { app: notification-service }
+  ports: [{ port: 3003 }]
+---
+# ─── Frontend ────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: openstack-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: frontend }
+  template:
+    metadata:
+      labels: { app: frontend }
+    spec:
+      containers:
+      - name: frontend
+        image: openstack-portal/frontend:latest
+        imagePullPolicy: IfNotPresent
+        ports: [{ containerPort: 80 }]
+        resources:
+          requests: { cpu: 50m,  memory: 64Mi }
+          limits:   { cpu: 200m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: openstack-portal
+spec:
+  selector: { app: frontend }
+  ports: [{ port: 80 }]

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: openstack-portal
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: openstack-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: postgres }
+  template:
+    metadata:
+      labels: { app: postgres }
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        ports: [{ containerPort: 5432 }]
+        env:
+        - { name: POSTGRES_DB,       valueFrom: { configMapKeyRef: { name: portal-config,  key: POSTGRES_DB } } }
+        - { name: POSTGRES_USER,     valueFrom: { secretKeyRef:   { name: portal-secrets, key: POSTGRES_USER } } }
+        - { name: POSTGRES_PASSWORD, valueFrom: { secretKeyRef:   { name: portal-secrets, key: POSTGRES_PASSWORD } } }
+        volumeMounts:
+        - { name: data, mountPath: /var/lib/postgresql/data }
+        readinessProbe:
+          exec:
+            command: [pg_isready, -U, portal_user, -d, openstack_portal]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests: { cpu: 250m, memory: 512Mi }
+          limits:   { cpu: 1,    memory: 2Gi }
+      volumes:
+      - name: data
+        persistentVolumeClaim: { claimName: postgres-pvc }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: openstack-portal
+spec:
+  selector: { app: postgres }
+  ports: [{ port: 5432 }]

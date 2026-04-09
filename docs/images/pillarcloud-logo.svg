@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="38" fill="url(#g1)"/>
+  <!-- Pillar left -->
+  <rect x="18" y="22" width="10" height="36" rx="2" fill="#fff" opacity="0.95"/>
+  <!-- Pillar center -->
+  <rect x="35" y="16" width="10" height="42" rx="2" fill="#fff" opacity="0.95"/>
+  <!-- Pillar right -->
+  <rect x="52" y="22" width="10" height="36" rx="2" fill="#fff" opacity="0.95"/>
+  <!-- Cloud shape on top -->
+  <ellipse cx="40" cy="18" rx="18" ry="8" fill="#93c5fd" opacity="0.6"/>
+  <!-- Base line -->
+  <rect x="14" y="58" width="52" height="4" rx="2" fill="#fff" opacity="0.8"/>
+</svg>

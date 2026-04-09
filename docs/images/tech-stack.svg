@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" font-family="Segoe UI,Roboto,sans-serif">
+  <defs>
+    <filter id="sh4"><feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.08"/></filter>
+    <style>.t4{font-size:12px;font-weight:700;fill:#1e293b}.s4{font-size:9px;fill:#64748b}.bx4{rx:8;filter:url(#sh4)}</style>
+  </defs>
+  <rect width="800" height="320" fill="#f8fafc" rx="10"/>
+  <text x="400" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">Technology Stack</text>
+
+  <!-- Frontend -->
+  <rect x="20" y="48" width="180" height="110" class="bx4" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="110" y="68" text-anchor="middle" class="t4" fill="#1d4ed8">Frontend</text>
+  <text x="110" y="86" text-anchor="middle" class="s4">React 18 + TypeScript</text>
+  <text x="110" y="100" text-anchor="middle" class="s4">Material UI (MUI) v5</text>
+  <text x="110" y="114" text-anchor="middle" class="s4">Redux Toolkit</text>
+  <text x="110" y="128" text-anchor="middle" class="s4">Vite + React Router</text>
+  <text x="110" y="142" text-anchor="middle" class="s4">Recharts | Axios</text>
+
+  <!-- Node.js Services -->
+  <rect x="215" y="48" width="180" height="110" class="bx4" fill="#f0fdf4" stroke="#22c55e"/>
+  <text x="305" y="68" text-anchor="middle" class="t4" fill="#166534">Node.js Services</text>
+  <text x="305" y="86" text-anchor="middle" class="s4">Express.js</text>
+  <text x="305" y="100" text-anchor="middle" class="s4">JWT (jsonwebtoken)</text>
+  <text x="305" y="114" text-anchor="middle" class="s4">express-rate-limit</text>
+  <text x="305" y="128" text-anchor="middle" class="s4">Winston + Morgan logging</text>
+  <text x="305" y="142" text-anchor="middle" class="s4">node-cron | nodemailer</text>
+
+  <!-- Python Services -->
+  <rect x="410" y="48" width="180" height="110" class="bx4" fill="#fefce8" stroke="#eab308"/>
+  <text x="500" y="68" text-anchor="middle" class="t4" fill="#854d0e">Python Services</text>
+  <text x="500" y="86" text-anchor="middle" class="s4">FastAPI + Uvicorn</text>
+  <text x="500" y="100" text-anchor="middle" class="s4">OpenStack SDK</text>
+  <text x="500" y="114" text-anchor="middle" class="s4">SQLAlchemy + Alembic</text>
+  <text x="500" y="128" text-anchor="middle" class="s4">Pydantic validation</text>
+  <text x="500" y="142" text-anchor="middle" class="s4">python-jose (JWT)</text>
+
+  <!-- Infrastructure -->
+  <rect x="605" y="48" width="180" height="110" class="bx4" fill="#fef2f2" stroke="#ef4444"/>
+  <text x="695" y="68" text-anchor="middle" class="t4" fill="#991b1b">Infrastructure</text>
+  <text x="695" y="86" text-anchor="middle" class="s4">PostgreSQL 15</text>
+  <text x="695" y="100" text-anchor="middle" class="s4">Redis 7</text>
+  <text x="695" y="114" text-anchor="middle" class="s4">RabbitMQ 3</text>
+  <text x="695" y="128" text-anchor="middle" class="s4">Nginx (reverse proxy)</text>
+  <text x="695" y="142" text-anchor="middle" class="s4">Docker + Docker Compose</text>
+
+  <!-- DevOps -->
+  <rect x="20" y="180" width="375" height="60" class="bx4" fill="#f5f3ff" stroke="#8b5cf6"/>
+  <text x="207" y="200" text-anchor="middle" class="t4" fill="#6d28d9">DevOps &amp; Orchestration</text>
+  <text x="207" y="218" text-anchor="middle" class="s4">Kubernetes | Kustomize | Helm | HPA | NGINX Ingress | cert-manager</text>
+  <text x="207" y="232" text-anchor="middle" class="s4">Calico (NetworkPolicy) | ArgoCD (GitOps) | Velero (Backups)</text>
+
+  <!-- Observability -->
+  <rect x="410" y="180" width="375" height="60" class="bx4" fill="#ecfdf5" stroke="#10b981"/>
+  <text x="597" y="200" text-anchor="middle" class="t4" fill="#065f46">Observability &amp; Security</text>
+  <text x="597" y="218" text-anchor="middle" class="s4">Prometheus + Grafana | Loki + Promtail | Jaeger (Tracing)</text>
+  <text x="597" y="232" text-anchor="middle" class="s4">HashiCorp Vault | ModSecurity WAF | Istio mTLS</text>
+
+  <!-- OpenStack -->
+  <rect x="20" y="258" width="765" height="48" class="bx4" fill="#faf5ff" stroke="#a78bfa"/>
+  <text x="402" y="278" text-anchor="middle" class="t4" fill="#6d28d9">OpenStack Integration (18 Services)</text>
+  <text x="402" y="294" text-anchor="middle" class="s4">Keystone | Nova | Neutron | Cinder | Glance | Swift | Heat | Octavia | Barbican | Designate | Manila | Magnum | Trove | Sahara | Ironic | Zaqar | Mistral | Watcher</text>
+</svg>

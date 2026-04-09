@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: openstack-portal
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: openstack-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: rabbitmq }
+  template:
+    metadata:
+      labels: { app: rabbitmq }
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management-alpine
+        ports:
+        - { containerPort: 5672 }
+        - { containerPort: 15672 }
+        volumeMounts:
+        - { name: data, mountPath: /var/lib/rabbitmq }
+        readinessProbe:
+          exec:
+            command: [rabbitmq-diagnostics, -q, ping]
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        resources:
+          requests: { cpu: 200m, memory: 256Mi }
+          limits:   { cpu: 1,    memory: 1Gi }
+      volumes:
+      - name: data
+        persistentVolumeClaim: { claimName: rabbitmq-pvc }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: openstack-portal
+spec:
+  selector: { app: rabbitmq }
+  ports:
+  - { name: amqp, port: 5672 }
+  - { name: mgmt, port: 15672 }

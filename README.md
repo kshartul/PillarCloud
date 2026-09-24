@@ -5,7 +5,7 @@
 <h1 align="center">PillarCloud</h1>
 
 <p align="center">
-  <strong>Enterprise Cloud Management & Billing Platform</strong><br/>
+  <strong>Enterprise Cloud Management, Admin & Billing Platform</strong><br/>
   Built on OpenStack | Microservices Architecture | Production-Ready
 </p>
 
